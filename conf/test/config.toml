@@ -1,0 +1,106 @@
+# centnet-scs profile
+# created by Wayne Yao, 2021-6-7
+
+# 日志相关配置
+[logging]
+  logPath = "./log"
+  logFile = "main.log"
+  fileLevel = "DEBUG"
+  consoleLevel = "DEBUG"
+  maxAge = 7
+  maxSize = 10
+
+[scs]
+  # keygoe连接地址
+  [scs.keygoe]
+    host = "192.168.1.205"
+    port = 9000
+    username = ""
+    password = ""
+
+  # 云警相关配置
+  [scs.kabuto]
+    enable = false
+    host = "127.0.0.1"
+    port = 5116
+    requestDuration = "3s"
+    # 劝阻记录缓存时长
+    dissuadeCacheDuration = "72h"
+
+  
+  # 录/放音相关配置
+  [scs.recplay]
+    # 录音相关：开关/路径/存储时长
+    recordingEnable = true
+    recordingPath = "/home/scs/recordings"
+    recordingMaxLife = "4320h"
+    # 放音相关：路径/欢迎语/线路忙提示语
+    playbackPath = "/home/centnet-scs/playback"
+    welcomeFile = "welcome_to_96110.wav"
+    linesBusyFile = "lines_are_busy.wav"
+
+  # http服务 (供录音下载或呼叫控制)
+  [scs.http]
+    enable = true
+    host = "127.0.0.1"
+    port = 9157
+    # http请求认证信息，请勿修改！！！
+    AppId = "432a3nc4"
+    AppSecret = "a8f224aea83a97ef395c75df6fe3a289"
+  
+  # 总机落地配置
+  [scs.switchBoard]
+    enable = true
+    number = ["96110"]
+# voip注册账号配置
+[voip]
+  authPassword = false
+  regTimeout = "1h"
+  # 劝阻号码池（数字中继呼入1级路由）
+  [voip.dissuading]
+    enable = true
+    start = "1101000"
+    total = 2000
+    password = "123456"
+
+  # 呼叫中心（数字中继呼入2级路由）
+  [voip.callcenter]
+  enable = false
+  number = "0108888"
+  password = "123456"
+
+  # 咨询号码池（数字中继呼入3级路由）
+  [voip.consulting]
+    enable = false
+    start = "1105000"
+    total = 2000
+    password = "123456"
+
+
+  # 机器人号码池，兼容点对点+注册两种模式，满足其一即可外呼。
+  [voip.robots]
+    enable = false
+    start = "1108000"
+    total = 2000
+    password = "123456"
+    # 白名单格式：ip[:port]，英文','结束，不带端口即加入全端口，若配置成"*"，则全ip开放
+    whiteList = [
+      "127.0.0.1",
+      # ----- 新添加白名单起始行 -----
+      
+      # ----- 新添加白名单结束行 -----
+      "127.0.0.1:5060"
+    ]
+
+# 数据库相关配置
+[orm]
+  # 连接地址，格式为user:password@tcp(host:port)/db_name?paramters...
+  dsn = "scs:123456@tcp(127.0.0.1:3306)/centnet_scs?timeout=10s&readTimeout=10s&writeTimeout=10s&parseTime=true&loc=Local&charset=utf8,utf8mb4"
+  active = 100
+  idle = 5
+  idleTimeout = "10m"
+
+# redis相关配置
+[redis]
+  addr = "127.0.0.1:6379"
+  auth = "centnet@123"
